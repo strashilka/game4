@@ -11,3 +11,71 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.colorItem {
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+  float: left;
+  position: relative;
+}
+
+.feedbackItem {
+  width: 10px;
+  height: 10px;
+  margin: 5px;
+  float: left;
+  position: relative;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: grey;
+}
+
+.colorItemButton{
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.pickColorButton{
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border-radius: 10px;
+  float: left;
+}
+
+.pickColorBoard {
+  width: 90px;
+  height: 60px;
+  padding: 5px;
+  background-color: lightgrey;
+  border-radius: 10px;
+  position: relative;
+  z-index:9;
+  opacity: 90%;
+}
+
+.answerBoard{
+  height: 50px;
+  width: 350px;
+  display: block;
+  float: left;
+}
+
+.feedbackBoard{
+  width: 44px;
+  height: 44px;
+  padding: 2px;
+  position: relative;
+  z-index:9;
+  border-width: 1px;
+  border-color: gray;
+  border-style: solid;
+  float: left;
+}
+
+.questionBoard{
+  margin-left: 50px;
+}
