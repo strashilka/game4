@@ -19,5 +19,6 @@ export function randomColor(): ItemColors {
 export enum FeedbackColors {
     None = 'white',
     ColorPosition = 'black',
-    Color = 'lightgrey'
+    Color = 'lightgrey',
+    Question = 'grey'
 }

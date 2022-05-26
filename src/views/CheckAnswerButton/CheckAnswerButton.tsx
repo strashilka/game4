@@ -31,7 +31,7 @@ export default function CheckAnswerButton({ isButtonDisabled }:CheckAnswerButton
       aria-label="Choose color"
       type="checkbox"
       disabled={!!isButtonDisabled}
-      checked={false}
+      checked={!!isButtonDisabled}
       onChange={doNothing}
     />
   );

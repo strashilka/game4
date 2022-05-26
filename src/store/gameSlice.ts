@@ -92,7 +92,7 @@ export const gameSlice = createSlice({
 
       let positionedItemsCount = 0;
       for (let i = 0; i < 4; i += 1) {
-        // console.log(`${row[i]}  ${question[i]}`);
+        // console.log(` ${row[i]}  ${question[i]}`);
         if (row[i] === question[i])positionedItemsCount += 1;
       }
 
@@ -144,6 +144,11 @@ export const selectAnswers = createSelector(
 export const getAnswersByRowNumber = (row:number) => createSelector(
   selectSelf,
   (state:GameState) => state.answers[row],
+);
+
+export const selectQuestions = createSelector(
+  selectSelf,
+  (state:GameState) => state.question,
 );
 
 export const selectFeedbackByRowNumber = (row:number) => createSelector(
