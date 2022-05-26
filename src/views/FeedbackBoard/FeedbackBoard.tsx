@@ -9,11 +9,11 @@ type FeedbackBoardProps = {
 
 export default function FeedbackBoard({ row }:FeedbackBoardProps) {
   const feedbackByRow = useSelector(selectFeedbackByRowNumber(row));
+
   return (
     <div className="feedbackBoard">
-      {feedbackByRow.map((feedback, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <FeedbackItem color={feedback} key={index} />
+      {feedbackByRow.map((feedbackWithId) => (
+        <FeedbackItem color={feedbackWithId.color} key={feedbackWithId.id} />
       ))}
     </div>
   );

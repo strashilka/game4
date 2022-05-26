@@ -8,6 +8,11 @@ export enum ItemColors {
     Orange = 'orange'
 }
 
+export type ItemColorWithId = {
+    id: number,
+    color: ItemColors
+}
+
 export function randomColor(): ItemColors {
   const itemEnumValues = Object.values(ItemColors);
   const randomIndex = Math.floor(Math.random() * (itemEnumValues.length - 1)) + 1;
@@ -21,4 +26,9 @@ export enum FeedbackColors {
     ColorPosition = 'black',
     Color = 'lightgrey',
     Question = 'grey'
+}
+
+export type FeedbackColorWithId = {
+    id: number,
+    color: FeedbackColors
 }

@@ -1,4 +1,10 @@
-import { FeedbackColors, ItemColors, randomColor } from 'views/ColorItem/ItemColors';
+import {
+  FeedbackColors,
+  FeedbackColorWithId,
+  ItemColors,
+  ItemColorWithId,
+  randomColor,
+} from 'views/ColorItem/ItemColors';
 import {
   createEntityAdapter, createSelector, createSlice, EntityAdapter, PayloadAction,
 } from '@reduxjs/toolkit';
@@ -15,12 +21,12 @@ type GameState = {
   endTime: number,
   status:GameStatus,
   openItem: ItemPosition,
-  question: Array<ItemColors>,
-  answers: Array<Array<ItemColors>>
-  feedback: Array<Array<FeedbackColors>>
+  question: Array<ItemColorWithId>,
+  answers: Array<Array<ItemColorWithId>>
+  feedback: Array<Array<FeedbackColorWithId>>
 }
 
-const gameAdapter :EntityAdapter<ItemColors> = createEntityAdapter();
+const gameAdapter :EntityAdapter<ItemColorWithId> = createEntityAdapter();
 export const { selectAll: selectAllUsers } = gameAdapter.getSelectors(
   (state:RootState) => state.game,
 );
@@ -45,27 +51,39 @@ export const gameSlice = createSlice({
       state.status = GameStatus.Online;
       state.answers = [];
 
-      const questions : Array<ItemColors> = [];
-      let color:ItemColors;
+      const questions : Array<ItemColorWithId> = [];
+
       for (let i = 0; i < 4; i += 1) {
+        let color:ItemColors;
+        let duplicateColor = true;
+
         do {
           color = randomColor();
-        } while (questions.includes(color));
-        questions.push(color);
+          // eslint-disable-next-line no-loop-func
+          duplicateColor = questions.some((q) => q.color === color);
+        } while (duplicateColor);
+
+        questions[i] = { id: i, color };
       }
 
       state.question = questions;
 
       state.answers = [];
       state.feedback = [];
-      state.answers[0] = new Array(4).fill(ItemColors.None);
-      state.feedback[0] = new Array(4).fill(FeedbackColors.None);
+      state.answers[0] = [];
+      state.feedback[0] = [];
 
-      console.log(`Start new game with colors: ${questions.toString()}`);
+      for (let i = 0; i < 4; i += 1) {
+        state.answers[0][i] = { id: i, color: ItemColors.None };
+        state.feedback[0][i] = { id: i, color: FeedbackColors.None };
+      }
+
+      const cl = questions.map((q) => q.color);
+      console.log(`Start new game with colors: ${cl.toString()}`);
     },
 
     setAnswerColor: (state, action:PayloadAction<ItemColors>) => {
-      state.answers[state.openItem.y][state.openItem.x] = action.payload;
+      state.answers[state.openItem.y][state.openItem.x].color = action.payload;
       state.openItem = { x: -1, y: -1 };
     },
 
@@ -82,26 +100,32 @@ export const gameSlice = createSlice({
       const row = state.answers[lastRowIndex];
       const { question } = state;
 
-      const availableItemCount = new Set(row).size;
+      const availableItem:Array<ItemColors> = [];
+      row.forEach((item) => {
+        if (!availableItem.includes(item.color)
+            && item.color !== ItemColors.None) availableItem.push(item.color);
+      });
+      const availableItemCount = availableItem.length;
       if (availableItemCount !== 4) {
         alert('Проверьте правильность заполнения ответа (без дублей, без пропусков)');
         return;
       }
 
-      const intersectedItemsCount = row.filter((value) => question.includes(value)).length;
+      const intersectedItemsCount = row.filter(
+        (value) => question.some((q) => q.color === value.color),
+      ).length;
 
       let positionedItemsCount = 0;
       for (let i = 0; i < 4; i += 1) {
-        // console.log(` ${row[i]}  ${question[i]}`);
-        if (row[i] === question[i])positionedItemsCount += 1;
+        if (row[i].color === question[i].color) positionedItemsCount += 1;
+      }
+      const feedback: Array<FeedbackColorWithId> = [];
+      for (let i = 0; i < 4; i += 1) {
+        feedback[i] = { id: i, color: FeedbackColors.None };
+        if (i < positionedItemsCount) feedback[i].color = FeedbackColors.ColorPosition;
+        else if (i < intersectedItemsCount) feedback[i].color = FeedbackColors.Color;
       }
 
-      const feedback = [];
-      for (let i = 0; i < 4; i += 1) {
-        if (i < positionedItemsCount) feedback[i] = FeedbackColors.ColorPosition;
-        else if (i < intersectedItemsCount) feedback[i] = FeedbackColors.Color;
-        else feedback[i] = FeedbackColors.None;
-      }
       state.feedback[lastRowIndex] = feedback;
 
       if (positionedItemsCount === 4) {
@@ -110,8 +134,13 @@ export const gameSlice = createSlice({
         return;
       }
 
-      state.answers[lastRowIndex + 1] = new Array(4).fill(ItemColors.None);
-      state.feedback[lastRowIndex + 1] = new Array(4).fill(FeedbackColors.None);
+      state.answers[lastRowIndex + 1] = [];
+      state.feedback[lastRowIndex + 1] = [];
+
+      for (let i = 0; i < 4; i += 1) {
+        state.answers[lastRowIndex + 1][i] = { id: i, color: ItemColors.None };
+        state.feedback[lastRowIndex + 1][i] = { id: i, color: FeedbackColors.None };
+      }
     },
   },
 });
@@ -168,5 +197,5 @@ export const selectOpenItem = createSelector(
 
 export const selectItemColor = (position:ItemPosition) => createSelector(
   selectSelf,
-  (state: GameState) => state.answers[position.y][position.x],
+  (state: GameState) => state.answers[position.y][position.x].color,
 );
