@@ -6,17 +6,18 @@ import { ItemColorWithId } from 'views/ColorItem/ItemColors';
 import { getAnswersByRowNumber, isRowDisabled } from 'store/gameSlice';
 
 type AnswerBoardProps = {
-    row:number;
-}
+  row: number;
+};
 
-export default function AnswerBoard({ row }:AnswerBoardProps) {
+export default function AnswerBoard({ row }: AnswerBoardProps) {
   const answersWithIds = useSelector(getAnswersByRowNumber(row));
   const isButtonDisabled = useSelector(isRowDisabled(row));
 
   return (
     <div className="answerBoard">
-      {answersWithIds.map((item:ItemColorWithId) => (
-        <ColorItem col={item.id} row={row} key={item.id} active={!isButtonDisabled} />))}
+      {answersWithIds.map((item: ItemColorWithId) => (
+        <ColorItem col={item.id} row={row} key={item.id} active={!isButtonDisabled} />
+      ))}
       <CheckAnswerButton isButtonDisabled={isButtonDisabled} />
     </div>
   );

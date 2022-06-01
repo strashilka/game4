@@ -6,14 +6,14 @@ const CheckAnswerButtonStyle = {
   width: '20px',
   height: '20px',
   margin: '10px',
-  Float: 'left',
+  Float: 'left'
 };
 
 type CheckAnswerButtonProps = {
-  isButtonDisabled:boolean
-}
+  isButtonDisabled: boolean;
+};
 
-export default function CheckAnswerButton({ isButtonDisabled }:CheckAnswerButtonProps) {
+export default function CheckAnswerButton({ isButtonDisabled }: CheckAnswerButtonProps) {
   const dispatch = useDispatch();
 
   function handleClick() {

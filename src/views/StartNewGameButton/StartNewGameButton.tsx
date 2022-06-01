@@ -8,6 +8,8 @@ export default function StartNewGameButton() {
     dispatch(startNewGame());
   }
   return (
-    <button onClick={handleStartGame} value="Начать игру" type="button" aria-label="Start new game">Начать игру</button>
+    <button onClick={handleStartGame} value="Начать игру" type="button" aria-label="Start new game">
+      Начать игру
+    </button>
   );
 }

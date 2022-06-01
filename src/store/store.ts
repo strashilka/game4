@@ -5,8 +5,8 @@ import { resultSlice } from './resultSlice';
 export const store = configureStore({
   reducer: {
     game: gameSlice.reducer,
-    result: resultSlice.reducer,
-  },
+    result: resultSlice.reducer
+  }
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

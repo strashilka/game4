@@ -3,9 +3,9 @@ import FeedbackBoard from 'views/FeedbackBoard/FeedbackBoard';
 import AnswerBoard from 'views/AnswerBoard/AnswerBoard';
 
 type GameRowProps = {
-    row:number;
-}
-export default function GameRow({ row }:GameRowProps) {
+  row: number;
+};
+export default function GameRow({ row }: GameRowProps) {
   return (
     <div>
       <FeedbackBoard row={row} />

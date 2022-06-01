@@ -10,5 +10,5 @@ const root = createRoot(container!); // createRoot(container!) if you use TypeSc
 root.render(
   <Provider store={store}>
     <App />
-  </Provider>,
+  </Provider>
 );

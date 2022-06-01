@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import { selectFeedbackByRowNumber } from 'store/gameSlice';
 
 type FeedbackBoardProps = {
-    row:number;
-}
+  row: number;
+};
 
-export default function FeedbackBoard({ row }:FeedbackBoardProps) {
+export default function FeedbackBoard({ row }: FeedbackBoardProps) {
   const feedbackByRow = useSelector(selectFeedbackByRowNumber(row));
 
   return (

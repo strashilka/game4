@@ -1,15 +1,13 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .colorItem {
@@ -43,13 +41,13 @@ code {
   display: inline-block;
 }
 
-.colorItemButton{
+.colorItemButton {
   width: 20px;
   height: 20px;
   border-radius: 10px;
 }
 
-.pickColorButton{
+.pickColorButton {
   width: 20px;
   height: 20px;
   margin: 5px;
@@ -64,29 +62,29 @@ code {
   background-color: lightgrey;
   border-radius: 10px;
   position: relative;
-  z-index:9;
+  z-index: 9;
   opacity: 90%;
 }
 
-.answerBoard{
+.answerBoard {
   height: 50px;
   width: 350px;
   display: block;
   float: left;
 }
 
-.feedbackBoard{
+.feedbackBoard {
   width: 44px;
   height: 44px;
   padding: 2px;
   position: relative;
-  z-index:9;
+  z-index: 9;
   border-width: 1px;
   border-color: gray;
   border-style: solid;
   float: left;
 }
 
-.questionBoard{
+.questionBoard {
   margin-left: 50px;
 }

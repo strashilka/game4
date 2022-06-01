@@ -1,33 +1,27 @@
 import { ItemColors } from 'views/ColorItem/ItemColors';
-import {
-  createEntityAdapter, createSelector, createSlice, EntityAdapter,
-} from '@reduxjs/toolkit';
+import { createEntityAdapter, createSelector, createSlice, EntityAdapter } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { GameResult } from './storeData';
 
 type resultState = {
-    entities: Array<GameResult>
-}
+  entities: Array<GameResult>;
+};
 
-const resultAdapter :EntityAdapter<ItemColors> = createEntityAdapter();
+const resultAdapter: EntityAdapter<ItemColors> = createEntityAdapter();
 export const { selectAll: selectAllUsers } = resultAdapter.getSelectors(
-  (state:RootState) => state.result,
+  (state: RootState) => state.result
 );
 
 const initialState = resultAdapter.getInitialState({
-  entities: [],
+  entities: []
 } as resultState);
 
 export const resultSlice = createSlice({
   name: 'result',
   initialState,
-  reducers: {
-  },
+  reducers: {}
 });
 
 // 55555 5555
 const selectSelf = (state: RootState) => state;
-export const selectGameStatus2 = createSelector(
-  selectSelf,
-  (state:RootState) => state.result,
-);
+export const selectGameStatus2 = createSelector(selectSelf, (state: RootState) => state.result);

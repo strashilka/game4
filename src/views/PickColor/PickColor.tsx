@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import { setAnswerColor } from 'store/gameSlice';
 
 type PickColorProps = {
-  color: ItemColors,
-}
+  color: ItemColors;
+};
 
 export default function PickColor({ color }: PickColorProps) {
   const dispatch = useDispatch();

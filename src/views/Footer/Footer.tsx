@@ -4,7 +4,7 @@ import { selectGameStatus } from 'store/gameSlice';
 import * as React from 'react';
 
 export default function Footer() {
-  const status:GameStatus = useSelector(selectGameStatus);
+  const status: GameStatus = useSelector(selectGameStatus);
   if (status !== GameStatus.Online) return <div />;
   return (
     <div>

@@ -3,33 +3,34 @@ import {
   FeedbackColorWithId,
   ItemColors,
   ItemColorWithId,
-  randomColor,
+  randomColor
 } from 'views/ColorItem/ItemColors';
 import {
-  createEntityAdapter, createSelector, createSlice, EntityAdapter, PayloadAction,
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  EntityAdapter,
+  PayloadAction
 } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { GameStatus } from './storeData';
 
 export type ItemPosition = {
-  x:number,
-  y:number
-}
+  x: number;
+  y: number;
+};
 
 type GameState = {
-  startTime: number,
-  endTime: number,
-  status:GameStatus,
-  openItem: ItemPosition,
-  question: Array<ItemColorWithId>,
-  answers: Array<Array<ItemColorWithId>>
-  feedback: Array<Array<FeedbackColorWithId>>
-}
+  startTime: number;
+  endTime: number;
+  status: GameStatus;
+  openItem: ItemPosition;
+  question: Array<ItemColorWithId>;
+  answers: Array<Array<ItemColorWithId>>;
+  feedback: Array<Array<FeedbackColorWithId>>;
+};
 
-const gameAdapter :EntityAdapter<ItemColorWithId> = createEntityAdapter();
-export const { selectAll: selectAllUsers } = gameAdapter.getSelectors(
-  (state:RootState) => state.game,
-);
+const gameAdapter: EntityAdapter<ItemColorWithId> = createEntityAdapter();
 
 const initialState = gameAdapter.getInitialState({
   startTime: 0,
@@ -38,7 +39,7 @@ const initialState = gameAdapter.getInitialState({
   openItem: { x: -1, y: -1 },
   question: [],
   answers: [],
-  feedback: [],
+  feedback: []
 } as GameState);
 
 export const gameSlice = createSlice({
@@ -51,10 +52,10 @@ export const gameSlice = createSlice({
       state.status = GameStatus.Online;
       state.answers = [];
 
-      const questions : Array<ItemColorWithId> = [];
+      const questions: Array<ItemColorWithId> = [];
 
       for (let i = 0; i < 4; i += 1) {
-        let color:ItemColors;
+        let color: ItemColors;
         let duplicateColor = true;
 
         do {
@@ -82,12 +83,12 @@ export const gameSlice = createSlice({
       console.log(`Start new game with colors: ${cl.toString()}`);
     },
 
-    setAnswerColor: (state, action:PayloadAction<ItemColors>) => {
+    setAnswerColor: (state, action: PayloadAction<ItemColors>) => {
       state.answers[state.openItem.y][state.openItem.x].color = action.payload;
       state.openItem = { x: -1, y: -1 };
     },
 
-    setOpenItem: (state, action:PayloadAction<ItemPosition>) => {
+    setOpenItem: (state, action: PayloadAction<ItemPosition>) => {
       state.openItem = action.payload;
     },
 
@@ -100,10 +101,10 @@ export const gameSlice = createSlice({
       const row = state.answers[lastRowIndex];
       const { question } = state;
 
-      const availableItem:Array<ItemColors> = [];
+      const availableItem: Array<ItemColors> = [];
       row.forEach((item) => {
-        if (!availableItem.includes(item.color)
-            && item.color !== ItemColors.None) availableItem.push(item.color);
+        if (!availableItem.includes(item.color) && item.color !== ItemColors.None)
+          availableItem.push(item.color);
       });
       const availableItemCount = availableItem.length;
       if (availableItemCount !== 4) {
@@ -111,8 +112,8 @@ export const gameSlice = createSlice({
         return;
       }
 
-      const intersectedItemsCount = row.filter(
-        (value) => question.some((q) => q.color === value.color),
+      const intersectedItemsCount = row.filter((value) =>
+        question.some((q) => q.color === value.color)
       ).length;
 
       let positionedItemsCount = 0;
@@ -141,61 +142,42 @@ export const gameSlice = createSlice({
         state.answers[lastRowIndex + 1][i] = { id: i, color: ItemColors.None };
         state.feedback[lastRowIndex + 1][i] = { id: i, color: FeedbackColors.None };
       }
-    },
-  },
+    }
+  }
 });
 
-export const {
-  startNewGame, setAnswerColor, setOpenItem, closeItem, checkLastRow,
-} = gameSlice.actions;
+export const { startNewGame, setAnswerColor, setOpenItem, closeItem, checkLastRow } =
+  gameSlice.actions;
 
 const selectSelf = (state: RootState) => state.game;
-export const selectGameStatus = createSelector(
-  selectSelf,
-  (state:GameState) => state.status,
-);
+export const selectGameStatus = createSelector(selectSelf, (state: GameState) => state.status);
 
 export const selectMovesCount = createSelector(
   selectSelf,
-  (state:GameState) => state.answers.length,
+  (state: GameState) => state.answers.length
 );
 
-export const selectGameDuration = createSelector(
-  selectSelf,
-  (state:GameState) => Math.trunc((state.endTime - state.startTime) / 1000),
+export const selectGameDuration = createSelector(selectSelf, (state: GameState) =>
+  Math.trunc((state.endTime - state.startTime) / 1000)
 );
 
-export const selectAnswers = createSelector(
-  selectSelf,
-  (state:GameState) => state.answers,
-);
+export const selectAnswers = createSelector(selectSelf, (state: GameState) => state.answers);
 
-export const getAnswersByRowNumber = (row:number) => createSelector(
-  selectSelf,
-  (state:GameState) => state.answers[row],
-);
+export const getAnswersByRowNumber = (row: number) =>
+  createSelector(selectSelf, (state: GameState) => state.answers[row]);
 
-export const selectQuestions = createSelector(
-  selectSelf,
-  (state:GameState) => state.question,
-);
+export const selectQuestions = createSelector(selectSelf, (state: GameState) => state.question);
 
-export const selectFeedbackByRowNumber = (row:number) => createSelector(
-  selectSelf,
-  (state:GameState) => state.feedback[row],
-);
+export const selectFeedbackByRowNumber = (row: number) =>
+  createSelector(selectSelf, (state: GameState) => state.feedback[row]);
 
-export const isRowDisabled = (row:number) => createSelector(
-  selectSelf,
-  (state:GameState) => row < (state.answers.length - 1) || state.status === GameStatus.Victory,
-);
+export const isRowDisabled = (row: number) =>
+  createSelector(
+    selectSelf,
+    (state: GameState) => row < state.answers.length - 1 || state.status === GameStatus.Victory
+  );
 
-export const selectOpenItem = createSelector(
-  selectSelf,
-  (state: GameState) => state.openItem,
-);
+export const selectOpenItem = createSelector(selectSelf, (state: GameState) => state.openItem);
 
-export const selectItemColor = (position:ItemPosition) => createSelector(
-  selectSelf,
-  (state: GameState) => state.answers[position.y][position.x].color,
-);
+export const selectItemColor = (position: ItemPosition) =>
+  createSelector(selectSelf, (state: GameState) => state.answers[position.y][position.x].color);

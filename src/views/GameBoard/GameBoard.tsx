@@ -6,15 +6,15 @@ import { selectAnswers, selectGameStatus } from 'store/gameSlice';
 import { ItemColorWithId } from 'views/ColorItem/ItemColors';
 
 export default function GameBoard() {
-  const status:GameStatus = useSelector(selectGameStatus);
-  const answers:Array<Array<ItemColorWithId>> = useSelector(selectAnswers);
+  const status: GameStatus = useSelector(selectGameStatus);
+  const answers: Array<Array<ItemColorWithId>> = useSelector(selectAnswers);
 
   if (status === GameStatus.Idle) return <div />;
 
   const revereAnswers = answers.slice(0).reverse();
   return (
     <div>
-      {revereAnswers.map((answer:Array<ItemColorWithId>, index) => (
+      {revereAnswers.map((answer: Array<ItemColorWithId>, index) => (
         <GameRow
           row={revereAnswers.length - 1 - index}
           key={index.toString() + answer.toString()}

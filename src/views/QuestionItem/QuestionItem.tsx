@@ -5,17 +5,17 @@ import { GameStatus } from 'store/storeData';
 import { selectGameStatus } from 'store/gameSlice';
 
 type QuestionItemProps = {
-    color: ItemColors
-}
+  color: ItemColors;
+};
 
-export default function QuestionItem({ color }:QuestionItemProps) {
-  const status:GameStatus = useSelector(selectGameStatus);
+export default function QuestionItem({ color }: QuestionItemProps) {
+  const status: GameStatus = useSelector(selectGameStatus);
 
   return (
     <div className="colorItem">
       <div
         className="colorItemButton"
-        style={{ backgroundColor: (status === GameStatus.Victory) ? color : 'grey' }}
+        style={{ backgroundColor: status === GameStatus.Victory ? color : 'grey' }}
       />
     </div>
   );

@@ -1,17 +1,17 @@
 export enum ItemColors {
-    None = 'white',
-    Red = 'red',
-    Green = 'green',
-    Blue = 'blue',
-    Yellow = 'yellow',
-    Purple = 'purple',
-    Orange = 'orange'
+  None = 'white',
+  Red = 'red',
+  Green = 'green',
+  Blue = 'blue',
+  Yellow = 'yellow',
+  Purple = 'purple',
+  Orange = 'orange'
 }
 
 export type ItemColorWithId = {
-    id: number,
-    color: ItemColors
-}
+  id: number;
+  color: ItemColors;
+};
 
 export function randomColor(): ItemColors {
   const itemEnumValues = Object.values(ItemColors);
@@ -22,13 +22,13 @@ export function randomColor(): ItemColors {
 }
 
 export enum FeedbackColors {
-    None = 'white',
-    ColorPosition = 'black',
-    Color = 'lightgrey',
-    Question = 'grey'
+  None = 'white',
+  ColorPosition = 'black',
+  Color = 'lightgrey',
+  Question = 'grey'
 }
 
 export type FeedbackColorWithId = {
-    id: number,
-    color: FeedbackColors
-}
+  id: number;
+  color: FeedbackColors;
+};
