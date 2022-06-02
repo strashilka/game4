@@ -14,12 +14,18 @@ type CheckAnswerButtonProps = {
 };
 
 export default function CheckAnswerButton({ isButtonDisabled }: CheckAnswerButtonProps) {
+  /**
+   * у тебя в store.ts есть useAppDispatch - его и нужно использовать
+   */
   const dispatch = useDispatch();
 
   function handleClick() {
     dispatch(checkLastRow());
   }
 
+  /**
+   * вот это непонятно зачем, если нужна пустая функция можно написать () => {} и все
+   */
   function doNothing() {
     console.log('Do nothing');
   }

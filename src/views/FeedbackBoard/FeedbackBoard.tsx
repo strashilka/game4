@@ -8,6 +8,9 @@ type FeedbackBoardProps = {
 };
 
 export default function FeedbackBoard({ row }: FeedbackBoardProps) {
+  /**
+   * параметрический селектор
+   */
   const feedbackByRow = useSelector(selectFeedbackByRowNumber(row));
 
   return (

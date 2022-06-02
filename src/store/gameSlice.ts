@@ -25,13 +25,21 @@ type GameState = {
   endTime: number;
   status: GameStatus;
   openItem: ItemPosition;
+  /** некрасивые массивы) */
   question: Array<ItemColorWithId>;
   answers: Array<Array<ItemColorWithId>>;
   feedback: Array<Array<FeedbackColorWithId>>;
 };
 
+/**
+ * Сущность можно и нужно передавать в createEntityAdapter<ItemColorWithId>()
+ * Тогда типы будут сами резолвиться везде
+ */
 const gameAdapter: EntityAdapter<ItemColorWithId> = createEntityAdapter();
 
+/**
+ * здесь тоже тип стейта можно передать аргументом дженерика gameAdapter.getInitialState<GameState>()
+ */
 const initialState = gameAdapter.getInitialState({
   startTime: 0,
   endTime: 0,
@@ -108,6 +116,9 @@ export const gameSlice = createSlice({
       });
       const availableItemCount = availableItem.length;
       if (availableItemCount !== 4) {
+        /**
+         * это конечно хорошо, но попробуй для разминки написать диалоговое окно)
+         */
         alert('Проверьте правильность заполнения ответа (без дублей, без пропусков)');
         return;
       }
@@ -168,9 +179,15 @@ export const getAnswersByRowNumber = (row: number) =>
 
 export const selectQuestions = createSelector(selectSelf, (state: GameState) => state.question);
 
+/**
+ * Должен быть параметрический селектор
+ */
 export const selectFeedbackByRowNumber = (row: number) =>
   createSelector(selectSelf, (state: GameState) => state.feedback[row]);
 
+/**
+ * Должен быть параметрический селектор
+ */
 export const isRowDisabled = (row: number) =>
   createSelector(
     selectSelf,
@@ -179,5 +196,8 @@ export const isRowDisabled = (row: number) =>
 
 export const selectOpenItem = createSelector(selectSelf, (state: GameState) => state.openItem);
 
+/**
+ * Должен быть параметрический селектор
+ */
 export const selectItemColor = (position: ItemPosition) =>
   createSelector(selectSelf, (state: GameState) => state.answers[position.y][position.x].color);
