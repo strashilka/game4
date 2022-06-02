@@ -12,8 +12,15 @@ type ColorItemProps = {
 export default function ColorItem({ col, row, active }: ColorItemProps) {
   const dispatch = useDispatch();
   const openItem = useSelector(selectOpenItem);
+  /**
+   * параметрический селектор
+   */
   const color = useSelector(selectItemColor({ x: col, y: row }));
 
+  /**
+   * Учисть писать стрелочные функции
+   * const handleClick = () => { ... }
+   */
   function handleClick() {
     const isPickColorBoard = openItem.x === col && openItem.y === row;
     if (!isPickColorBoard) dispatch(setOpenItem({ x: col, y: row }));

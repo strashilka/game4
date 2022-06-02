@@ -10,11 +10,16 @@ type AnswerBoardProps = {
 };
 
 export default function AnswerBoard({ row }: AnswerBoardProps) {
+  /*
+   надо научіться писать параметрические селекторы https://stackoverflow.com/questions/40291084/use-reselect-selector-with-parameters
+   в таком виде как сейчас - не работает мемоизация
+   */
   const answersWithIds = useSelector(getAnswersByRowNumber(row));
   const isButtonDisabled = useSelector(isRowDisabled(row));
 
   return (
     <div className="answerBoard">
+      {/* item: ItemColorWithId можно не писать. ТС сам разрулит. Если не разрулил значит по пути сюда что-то не так и надо искать */}
       {answersWithIds.map((item: ItemColorWithId) => (
         <ColorItem col={item.id} row={row} key={item.id} active={!isButtonDisabled} />
       ))}

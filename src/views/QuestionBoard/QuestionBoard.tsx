@@ -6,6 +6,9 @@ import { selectGameStatus, selectQuestions } from 'store/gameSlice';
 import { ItemColorWithId } from 'views/ColorItem/ItemColors';
 
 export default function QuestionBoard() {
+  /**
+   * типы резолвятся сами
+   */
   const status: GameStatus = useSelector(selectGameStatus);
   const questions: Array<ItemColorWithId> = useSelector(selectQuestions);
 

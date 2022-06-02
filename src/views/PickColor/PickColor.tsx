@@ -8,6 +8,7 @@ type PickColorProps = {
 };
 
 export default function PickColor({ color }: PickColorProps) {
+  /** useAppDispatch */
   const dispatch = useDispatch();
 
   function handleClick() {

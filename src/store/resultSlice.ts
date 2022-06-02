@@ -25,3 +25,7 @@ export const resultSlice = createSlice({
 // 55555 5555
 const selectSelf = (state: RootState) => state;
 export const selectGameStatus2 = createSelector(selectSelf, (state: RootState) => state.result);
+
+/**
+ * наверное ненужный слайс раз ничего не используется
+ */
