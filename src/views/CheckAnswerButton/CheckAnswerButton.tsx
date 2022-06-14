@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
-import { checkLastRow } from '../../store/gameSlice';
+import { checkLastRow } from 'store/gameSlice';
+import { useAppDispatch } from 'store/store';
 
 const CheckAnswerButtonStyle = {
   width: '20px',
@@ -14,21 +14,12 @@ type CheckAnswerButtonProps = {
 };
 
 export default function CheckAnswerButton({ isButtonDisabled }: CheckAnswerButtonProps) {
-  /**
-   * у тебя в store.ts есть useAppDispatch - его и нужно использовать
-   */
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   function handleClick() {
     dispatch(checkLastRow());
   }
 
-  /**
-   * вот это непонятно зачем, если нужна пустая функция можно написать () => {} и все
-   */
-  function doNothing() {
-    console.log('Do nothing');
-  }
   return (
     <input
       style={CheckAnswerButtonStyle}
@@ -38,7 +29,7 @@ export default function CheckAnswerButton({ isButtonDisabled }: CheckAnswerButto
       type="checkbox"
       disabled={!!isButtonDisabled}
       checked={!!isButtonDisabled}
-      onChange={doNothing}
+      onChange={() => {}}
     />
   );
 }

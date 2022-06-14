@@ -9,8 +9,7 @@ type QuestionItemProps = {
 };
 
 export default function QuestionItem({ color }: QuestionItemProps) {
-  /** типы резолвятся сами */
-  const status: GameStatus = useSelector(selectGameStatus);
+  const status = useSelector(selectGameStatus);
 
   return (
     <div className="colorItem">

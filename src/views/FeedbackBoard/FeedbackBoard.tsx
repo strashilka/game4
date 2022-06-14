@@ -1,17 +1,14 @@
 import * as React from 'react';
 import FeedbackItem from 'views/FeedbackItem/FeedbackItem';
-import { useSelector } from 'react-redux';
-import { selectFeedbackByRowNumber } from 'store/gameSlice';
+import { selectFeedbackByRow } from 'store/gameSlice';
+import { useAppSelector } from 'store/store';
 
 type FeedbackBoardProps = {
   row: number;
 };
 
 export default function FeedbackBoard({ row }: FeedbackBoardProps) {
-  /**
-   * параметрический селектор
-   */
-  const feedbackByRow = useSelector(selectFeedbackByRowNumber(row));
+  const feedbackByRow = useAppSelector((state) => selectFeedbackByRow(state, row));
 
   return (
     <div className="feedbackBoard">

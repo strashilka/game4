@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { ItemColors } from 'views/ColorItem/ItemColors';
-import { useDispatch } from 'react-redux';
 import { setAnswerColor } from 'store/gameSlice';
+import { useAppDispatch } from 'store/store';
 
 type PickColorProps = {
   color: ItemColors;
 };
 
 export default function PickColor({ color }: PickColorProps) {
-  /** useAppDispatch */
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   function handleClick() {
     dispatch(setAnswerColor(color));

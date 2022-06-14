@@ -6,11 +6,8 @@ import * as React from 'react';
 export default function Footer() {
   const status: GameStatus = useSelector(selectGameStatus);
 
-  /**
-   * если компонент не нужно рендерить, можно возвращать null. а еще код, отделенный скобками, легче читать
-   */
   if (status !== GameStatus.Online) {
-    return <div />;
+    return null;
   }
 
   return (

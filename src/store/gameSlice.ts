@@ -12,39 +12,33 @@ import {
   EntityAdapter,
   PayloadAction
 } from '@reduxjs/toolkit';
-import { RootState } from './store';
 import { GameStatus } from './storeData';
+import { RootState } from './store';
 
 export type ItemPosition = {
   x: number;
   y: number;
 };
 
-type GameState = {
+export type GameState = {
   startTime: number;
   endTime: number;
   status: GameStatus;
   openItem: ItemPosition;
-  /** некрасивые массивы) */
-  question: Array<ItemColorWithId>;
-  answers: Array<Array<ItemColorWithId>>;
-  feedback: Array<Array<FeedbackColorWithId>>;
+  message: string;
+  question: ItemColorWithId[];
+  answers: ItemColorWithId[][];
+  feedback: FeedbackColorWithId[][];
 };
 
-/**
- * Сущность можно и нужно передавать в createEntityAdapter<ItemColorWithId>()
- * Тогда типы будут сами резолвиться везде
- */
-const gameAdapter: EntityAdapter<ItemColorWithId> = createEntityAdapter();
+const gameAdapter: EntityAdapter<ItemColorWithId> = createEntityAdapter<ItemColorWithId>();
 
-/**
- * здесь тоже тип стейта можно передать аргументом дженерика gameAdapter.getInitialState<GameState>()
- */
-const initialState = gameAdapter.getInitialState({
+const initialState = gameAdapter.getInitialState<GameState>({
   startTime: 0,
   endTime: 0,
   status: GameStatus.Idle,
   openItem: { x: -1, y: -1 },
+  message: null,
   question: [],
   answers: [],
   feedback: []
@@ -55,7 +49,7 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     startNewGame: (state) => {
-      // save previousGame
+      // TODO: save  previousGame
       state.startTime = Date.now();
       state.status = GameStatus.Online;
       state.answers = [];
@@ -64,12 +58,16 @@ export const gameSlice = createSlice({
 
       for (let i = 0; i < 4; i += 1) {
         let color: ItemColors;
-        let duplicateColor = true;
+        let duplicateColor = false;
 
         do {
+          duplicateColor = false;
           color = randomColor();
-          // eslint-disable-next-line no-loop-func
-          duplicateColor = questions.some((q) => q.color === color);
+          for (let j = 0; j < questions.length; j += 1) {
+            if (questions[j].color === color) {
+              duplicateColor = true;
+            }
+          }
         } while (duplicateColor);
 
         questions[i] = { id: i, color };
@@ -88,7 +86,8 @@ export const gameSlice = createSlice({
       }
 
       const cl = questions.map((q) => q.color);
-      console.log(`Start new game with colors: ${cl.toString()}`);
+      // eslint-disable-next-line no-console
+      console.log(`Start new game with colors : ${cl.toString()}`);
     },
 
     setAnswerColor: (state, action: PayloadAction<ItemColors>) => {
@@ -116,10 +115,7 @@ export const gameSlice = createSlice({
       });
       const availableItemCount = availableItem.length;
       if (availableItemCount !== 4) {
-        /**
-         * это конечно хорошо, но попробуй для разминки написать диалоговое окно)
-         */
-        alert('Проверьте правильность заполнения ответа (без дублей, без пропусков)');
+        state.message = 'Проверьте правильность заполнения ответа (без дублей, без пропусков)';
         return;
       }
 
@@ -153,51 +149,63 @@ export const gameSlice = createSlice({
         state.answers[lastRowIndex + 1][i] = { id: i, color: ItemColors.None };
         state.feedback[lastRowIndex + 1][i] = { id: i, color: FeedbackColors.None };
       }
+    },
+
+    closeMessage: (state) => {
+      state.message = null;
     }
   }
 });
 
-export const { startNewGame, setAnswerColor, setOpenItem, closeItem, checkLastRow } =
+export const { startNewGame, setAnswerColor, setOpenItem, closeItem, checkLastRow, closeMessage } =
   gameSlice.actions;
 
-const selectSelf = (state: RootState) => state.game;
-export const selectGameStatus = createSelector(selectSelf, (state: GameState) => state.status);
-
+const selectGameState = (state: RootState) => state.game;
+export const selectGameStatus = createSelector(selectGameState, (state: GameState) => {
+  return state.status;
+});
 export const selectMovesCount = createSelector(
-  selectSelf,
+  selectGameState,
   (state: GameState) => state.answers.length
 );
 
-export const selectGameDuration = createSelector(selectSelf, (state: GameState) =>
+export const selectGameDuration = createSelector(selectGameState, (state: GameState) =>
   Math.trunc((state.endTime - state.startTime) / 1000)
 );
 
-export const selectAnswers = createSelector(selectSelf, (state: GameState) => state.answers);
+export const selectAnswer = createSelector(selectGameState, (state: GameState) => state.answers);
+const selectAnswerUtility = (state: RootState) => state.game.answers;
+export const selectAnswerByRow = createSelector(
+  [selectAnswerUtility, (state: RootState, row: number) => row],
+  (answer, row) => answer[row]
+);
 
-export const getAnswersByRowNumber = (row: number) =>
-  createSelector(selectSelf, (state: GameState) => state.answers[row]);
+export const selectQuestions = createSelector(
+  selectGameState,
+  (state: GameState) => state.question
+);
 
-export const selectQuestions = createSelector(selectSelf, (state: GameState) => state.question);
+const selectPosition = (state: RootState, position: ItemPosition) => position;
 
-/**
- * Должен быть параметрический селектор
- */
-export const selectFeedbackByRowNumber = (row: number) =>
-  createSelector(selectSelf, (state: GameState) => state.feedback[row]);
+const selectFeedbackUtility = (state: RootState) => state.game.feedback;
+export const selectFeedbackByRow = createSelector(
+  [selectFeedbackUtility, (state: RootState, row: number) => row],
+  (feedback, row) => feedback[row]
+);
 
-/**
- * Должен быть параметрический селектор
- */
-export const isRowDisabled = (row: number) =>
-  createSelector(
-    selectSelf,
-    (state: GameState) => row < state.answers.length - 1 || state.status === GameStatus.Victory
-  );
+const selectStatus = (state: RootState) => state.game.status;
+export const isRowDisabled = createSelector(
+  [selectAnswerUtility, selectStatus, (state: RootState, row: number) => row],
+  (answer, status, row) => row < answer.length - 1 || status === GameStatus.Victory
+);
 
-export const selectOpenItem = createSelector(selectSelf, (state: GameState) => state.openItem);
+export const selectOpenItem = createSelector(
+  [selectGameState],
+  (state: GameState) => state.openItem
+);
+export const selectItemColor = createSelector(
+  [selectAnswerUtility, selectPosition],
+  (answer, position) => answer[position.y][position.x].color
+);
 
-/**
- * Должен быть параметрический селектор
- */
-export const selectItemColor = (position: ItemPosition) =>
-  createSelector(selectSelf, (state: GameState) => state.answers[position.y][position.x].color);
+export const selectMessage = createSelector(selectGameState, (state: GameState) => state.message);

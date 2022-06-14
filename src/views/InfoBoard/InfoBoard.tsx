@@ -4,12 +4,9 @@ import { selectGameDuration, selectGameStatus, selectMovesCount } from 'store/ga
 import { GameStatus } from 'store/storeData';
 
 export default function InfoBoard() {
-  /**
-   * типы должны резолвиться сами
-   */
-  const status: GameStatus = useSelector(selectGameStatus);
-  const moves: GameStatus = useSelector(selectMovesCount);
-  const duration: GameStatus = useSelector(selectGameDuration);
+  const status = useSelector(selectGameStatus);
+  const moves = useSelector(selectMovesCount);
+  const duration = useSelector(selectGameDuration);
   return (
     <div>
       <p>
